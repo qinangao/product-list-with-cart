@@ -1,34 +1,63 @@
 import productData from "./data";
 import Button from "./Button";
+import { useState } from "react";
 
 function App() {
+  const [cart, setCart] = useState({});
+  function handleAdd(id) {
+    setCart((prev) => ({ ...prev, [id]: 1 }));
+  }
+
+  function handleIncrease(id) {
+    setCart((prev) => ({ ...prev, [id]: prev[id] + 1 }));
+  }
+  function handleDecrease(id) {
+    setCart((prev) => ({ ...prev, [id]: prev[id] - 1 }));
+  }
   return (
     <div className="app">
-      <Cards />
-      <ShoppingCart />
+      <Cards
+        cart={cart}
+        onAdd={handleAdd}
+        onIncrease={handleIncrease}
+        onDecrease={handleDecrease}
+      />
+      <ShoppingCart cart={cart} />
     </div>
   );
 }
 
-function Cards() {
+function Cards({ cart, onAdd, onIncrease, onDecrease }) {
   return (
     <div>
       <h1 className="title">Desserts</h1>
       <ul className="product-list">
         {productData.map((product) => (
-          <ProductCard productObj={product} key={crypto.randomUUID()} />
+          <ProductCard
+            productObj={product}
+            key={product.id}
+            quantity={cart[product.id] || 0}
+            onAdd={() => onAdd(product.id)}
+            onIncrease={() => onIncrease(product.id)}
+            onDecrease={() => onDecrease(product.id)}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function ProductCard({ productObj }) {
+function ProductCard({ productObj, quantity, onAdd, onIncrease, onDecrease }) {
   return (
     <div className="card">
       <div className="image-box">
         <img src={productObj.image.desktop} alt={productObj.category} />
-        <Button />
+        <Button
+          quantity={quantity}
+          onAdd={onAdd}
+          onIncrease={onIncrease}
+          onDecrease={onDecrease}
+        />
       </div>
       <div className="product-detail">
         <p className="category">{productObj.category}</p>
@@ -39,10 +68,11 @@ function ProductCard({ productObj }) {
   );
 }
 
-function ShoppingCart() {
+function ShoppingCart({ cart }) {
+  const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
   return (
     <div className="shopping-cart">
-      <h2>Your Cart (0)</h2>
+      <h2>Your Cart ({numOrder})</h2>
       <img src="/images/illustration-empty-cart.svg" alt="emply cart" />
       <p>Your added items will appear here</p>
     </div>

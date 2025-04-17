@@ -1,20 +1,8 @@
-import { useState } from "react";
-
-export default function Button() {
-  const [quantity, setQuantity] = useState(0);
-  function handleAddToCart() {
-    setQuantity(1);
-  }
-  const increase = function () {
-    setQuantity((q) => q + 1);
-  };
-  const decrease = function () {
-    setQuantity((q) => q - 1);
-  };
-
+export default function Button({ quantity, onAdd, onIncrease, onDecrease }) {
+  // console.log(quantity);
   if (quantity === 0) {
     return (
-      <button className="add-btn" onClick={handleAddToCart}>
+      <button className="add-btn" onClick={onAdd}>
         <img src="/images/icon-add-to-cart.svg" alt="cart-logo" />
         <span>Add to Cart</span>
       </button>
@@ -26,13 +14,13 @@ export default function Button() {
       <img
         src="/images/icon-decrement-quantity.svg"
         alt="cart-logo"
-        onClick={decrease}
+        onClick={onDecrease}
       />
       <span>{quantity}</span>
       <img
         src="/images/icon-increment-quantity.svg"
         alt="cart-logo"
-        onClick={increase}
+        onClick={onIncrease}
       />
     </button>
   );
