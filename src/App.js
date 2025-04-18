@@ -4,6 +4,7 @@ import { useState } from "react";
 
 function App() {
   const [cart, setCart] = useState({});
+
   function handleAdd(id) {
     setCart((prev) => ({ ...prev, [id]: 1 }));
   }
@@ -70,11 +71,25 @@ function ProductCard({ productObj, quantity, onAdd, onIncrease, onDecrease }) {
 
 function ShoppingCart({ cart }) {
   const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
+  console.log(Object.entries(cart));
   return (
     <div className="shopping-cart">
       <h2>Your Cart ({numOrder})</h2>
-      <img src="/images/illustration-empty-cart.svg" alt="emply cart" />
-      <p>Your added items will appear here</p>
+
+      {numOrder === 0 ? (
+        <>
+          <img src="/images/illustration-empty-cart.svg" alt="emply cart" />
+          <p>Your added items will appear here</p>
+        </>
+      ) : (
+        <ul>
+          {Object.entries(cart).map(([id, quantity]) => {
+            const product = productData.find((p) => p.id === Number(id));
+            console.log(product);
+            return <li key={id}>{product?.name}</li>;
+          })}
+        </ul>
+      )}
     </div>
   );
 }
