@@ -11,6 +11,7 @@
 }
 body {
   background-color: var(--Rose-50);
+  width: 100%;
 }
 * {
   margin: 0;
@@ -20,7 +21,7 @@ body {
 .app {
   display: flex;
   justify-content: center;
-  gap: 60px;
+  gap: 40px;
   padding: 40px 0 100px;
   position: relative;
 }
@@ -34,7 +35,6 @@ body {
 }
 .image-box > img {
   width: 250px;
-
   border-radius: 10px;
 }
 .add-btn {
@@ -49,8 +49,9 @@ body {
   font-size: 14px;
   border: 1px solid var(--Rose-500);
   position: absolute;
-  top: 220px;
-  left: 50px;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-weight: bold;
   cursor: pointer;
 }
@@ -71,7 +72,7 @@ p {
 .product-list {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  width: 800px;
+  width: 70%;
   gap: 30px;
   /* grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -80,7 +81,7 @@ p {
 }
 .shopping-cart {
   background-color: white;
-  width: 350px;
+  width: 20%;
   height: 60%;
   padding: 20px 30px;
   text-align: center;
@@ -190,13 +191,14 @@ p {
   border-radius: 50%;
   padding: 2px;
 }
-
+/* Modal */
 .modal {
   background-color: white;
   width: 400px;
   position: fixed;
-  top: 10%;
-  left: 40%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1;
   padding: 30px;
   border-radius: 20px;
@@ -241,4 +243,51 @@ p {
   color: var(--Rose-900);
   font-weight: bold;
   font-size: 16px;
+}
+@media (max-width: 992px) {
+  .app {
+    flex-direction: column;
+    align-items: center;
+  }
+  .shopping-cart {
+    width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-list {
+    grid-template-columns: 1fr 1fr;
+    width: 60%;
+    gap: 10px;
+  }
+  .shopping-cart {
+    width: 50%;
+  }
+}
+@media (max-width: 576px) {
+  .image-box > img {
+    width: 330px;
+    height: 250px;
+  }
+  .add-btn {
+    width: 200px;
+  }
+  .product-list {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+  }
+  .shopping-cart {
+    width: 80%;
+  }
+  .delivery-info {
+    padding: 12px;
+    gap: 0;
+  }
+  .modal {
+    width: 70%;
+    position: fixed;
+
+    padding: 30px;
+  }
 }
