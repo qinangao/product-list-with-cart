@@ -22,6 +22,7 @@ body {
   justify-content: center;
   gap: 60px;
   padding: 40px 0 100px;
+  position: relative;
 }
 .title {
   padding-bottom: 30px;
@@ -136,12 +137,13 @@ p {
 .order-name {
   font-weight: 600;
   color: var(--Rose-900);
+  margin-bottom: 10px;
 }
 .order-total {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 0 30px 0;
+  padding: 20px 0 20px 0;
 }
 .order-total > p {
   color: var(--Rose-900);
@@ -187,4 +189,55 @@ p {
   height: 10px;
   border-radius: 50%;
   padding: 2px;
+}
+
+.modal {
+  background-color: white;
+  width: 400px;
+  position: fixed;
+  top: 10%;
+  left: 40%;
+  z-index: 1;
+  padding: 30px;
+  border-radius: 20px;
+}
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(5px);
+}
+.confirm-title > h1 {
+  padding: 10px 0 10px 0;
+}
+.confirm-title > p {
+  padding-bottom: 30px;
+}
+.confirm-container {
+  background-color: var(--Rose-50);
+  padding: 20px 20px 0 20px;
+}
+.confirmed-order-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--Rose-100);
+  padding-bottom: 10px;
+}
+.confirmed-order-details > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.confirmed-order-details > div > img {
+  width: 50px;
+  margin-right: 10px;
+}
+
+.confirm-total-price {
+  color: var(--Rose-900);
+  font-weight: bold;
+  font-size: 16px;
 }
