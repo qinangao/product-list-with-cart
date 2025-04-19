@@ -217,13 +217,14 @@ p {
 }
 .confirm-container {
   background-color: var(--Rose-50);
-  padding: 20px 20px 0 20px;
+  padding: 10px 20px 0 20px;
 }
 .confirmed-order-details {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--Rose-100);
+  padding-top: 10px;
   padding-bottom: 10px;
 }
 .confirmed-order-details > div {

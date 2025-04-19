@@ -4,6 +4,15 @@ import { useState } from "react";
 
 function App() {
   const [cart, setCart] = useState({});
+  const [isConfirmed, setIsComfirmed] = useState(false);
+  function handleConfirmedOrder() {
+    setIsComfirmed(true);
+  }
+
+  function handleNewOrder() {
+    setIsComfirmed(false);
+    setCart({});
+  }
 
   const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
 
@@ -42,8 +51,14 @@ function App() {
         onDelete={handleDeleteProduct}
         numOrder={numOrder}
         totalPrice={totalPrice}
+        onconfirmed={handleConfirmedOrder}
       />
-      <Modal />
+      <Modal
+        totalPrice={totalPrice}
+        isConfirmed={isConfirmed}
+        onStartNew={handleNewOrder}
+        cart={cart}
+      />
     </div>
   );
 }
@@ -89,14 +104,7 @@ function ProductCard({ productObj, quantity, onAdd, onIncrease, onDecrease }) {
   );
 }
 
-function ShoppingCart({ cart, onDelete, numOrder, totalPrice }) {
-  // const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
-
-  // const totalPrice = Object.entries(cart).reduce((total, [id, quantity]) => {
-  //   const product = productData.find((p) => p.id === Number(id));
-  //   return total + (product ? quantity * product.price : 0);
-  // }, 0);
-
+function ShoppingCart({ cart, onDelete, numOrder, totalPrice, onconfirmed }) {
   return (
     <div className="shopping-cart">
       <h2>Your Cart ({numOrder})</h2>
@@ -145,16 +153,18 @@ function ShoppingCart({ cart, onDelete, numOrder, totalPrice }) {
               This is a <strong>Carbon-neutral</strong> delivery
             </span>
           </p>
-          <button className="btn-comfirm-order">Confirm Order</button>
+          <button className="btn-comfirm-order" onClick={onconfirmed}>
+            Confirm Order
+          </button>
         </>
       )}
     </div>
   );
 }
 
-function Modal() {
-  return (
-    <>
+function Modal({ cart, totalPrice, isConfirmed, onStartNew }) {
+  return isConfirmed ? (
+    <div>
       <div className="modal">
         <div className="confirm-title">
           <img src="/images/icon-order-confirmed.svg" alt="logo" />
@@ -163,29 +173,41 @@ function Modal() {
         </div>
         <div className="confirm-container">
           <ul>
-            <li className="confirmed-order-details">
-              <div>
-                <img src="/images/image-baklava-thumbnail.jpg" alt="" />
-                <div>
-                  <p className="order-name">Classic cake</p>
-                  <p>
-                    <span className="quantity">1x</span>
-                    <span className="unit-price">@ $5.50</span>
+            {Object.entries(cart).map(([id]) => {
+              const product = productData.find((p) => p.id === Number(id));
+              return (
+                <li className="confirmed-order-details">
+                  <div>
+                    <img src={product.image.thumbnail} alt="order-image" />
+                    <div>
+                      <p className="order-name">{product?.name}</p>
+                      <p>
+                        <span className="quantity">{cart[id]}x</span>
+                        <span className="unit-price">
+                          @ ${product?.price.toFixed(2)}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <p className="confirm-total-price">
+                    ${(cart[id] * product?.price).toFixed(2)}
                   </p>
-                </div>
-              </div>
-              <p className="confirm-total-price">$50.00</p>
-            </li>
+                </li>
+              );
+            })}
           </ul>
           <div className="order-total">
             <p>Order Total</p>
-            <h2>$90.00</h2>
+            <h2>${totalPrice.toFixed(2)}</h2>
           </div>
         </div>
-        <button className="btn-comfirm-order">Start New Order</button>
+        <button className="btn-comfirm-order" onClick={onStartNew}>
+          Start New Order
+        </button>
       </div>
       <div className="overlay"></div>
-    </>
-  );
+    </div>
+  ) : null;
 }
+
 export default App;
