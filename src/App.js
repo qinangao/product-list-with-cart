@@ -5,6 +5,13 @@ import { useState } from "react";
 function App() {
   const [cart, setCart] = useState({});
 
+  const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
+
+  const totalPrice = Object.entries(cart).reduce((total, [id, quantity]) => {
+    const product = productData.find((p) => p.id === Number(id));
+    return total + (product ? quantity * product.price : 0);
+  }, 0);
+
   function handleAdd(id) {
     setCart((prev) => ({ ...prev, [id]: 1 }));
   }
@@ -15,6 +22,13 @@ function App() {
   function handleDecrease(id) {
     setCart((prev) => ({ ...prev, [id]: prev[id] - 1 }));
   }
+
+  function handleDeleteProduct(id) {
+    const updatedCart = { ...cart };
+    delete updatedCart[id];
+    setCart(updatedCart);
+  }
+
   return (
     <div className="app">
       <Cards
@@ -23,7 +37,13 @@ function App() {
         onIncrease={handleIncrease}
         onDecrease={handleDecrease}
       />
-      <ShoppingCart cart={cart} />
+      <ShoppingCart
+        cart={cart}
+        onDelete={handleDeleteProduct}
+        numOrder={numOrder}
+        totalPrice={totalPrice}
+      />
+      <Modal />
     </div>
   );
 }
@@ -69,13 +89,13 @@ function ProductCard({ productObj, quantity, onAdd, onIncrease, onDecrease }) {
   );
 }
 
-function ShoppingCart({ cart }) {
-  const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
+function ShoppingCart({ cart, onDelete, numOrder, totalPrice }) {
+  // const numOrder = Object.values(cart).reduce((a, c) => a + c, 0);
 
-  const totalPrice = Object.entries(cart).reduce((total, [id, quantity]) => {
-    const product = productData.find((p) => p.id === Number(id));
-    return total + (product ? quantity * product.price : 0);
-  }, 0);
+  // const totalPrice = Object.entries(cart).reduce((total, [id, quantity]) => {
+  //   const product = productData.find((p) => p.id === Number(id));
+  //   return total + (product ? quantity * product.price : 0);
+  // }, 0);
 
   return (
     <div className="shopping-cart">
@@ -106,7 +126,9 @@ function ShoppingCart({ cart }) {
                       </span>
                     </p>
                   </div>
-                  <button className="btn-delete">&times;</button>
+                  <button className="btn-delete" onClick={() => onDelete(id)}>
+                    &times;
+                  </button>
                 </li>
               );
             })}
@@ -127,6 +149,43 @@ function ShoppingCart({ cart }) {
         </>
       )}
     </div>
+  );
+}
+
+function Modal() {
+  return (
+    <>
+      <div className="modal">
+        <div className="confirm-title">
+          <img src="/images/icon-order-confirmed.svg" alt="logo" />
+          <h1>Order Confirmed</h1>
+          <p>We hope you enjoy your food</p>
+        </div>
+        <div className="confirm-container">
+          <ul>
+            <li className="confirmed-order-details">
+              <div>
+                <img src="/images/image-baklava-thumbnail.jpg" alt="" />
+                <div>
+                  <p className="order-name">Classic cake</p>
+                  <p>
+                    <span className="quantity">1x</span>
+                    <span className="unit-price">@ $5.50</span>
+                  </p>
+                </div>
+              </div>
+              <p className="confirm-total-price">$50.00</p>
+            </li>
+          </ul>
+          <div className="order-total">
+            <p>Order Total</p>
+            <h2>$90.00</h2>
+          </div>
+        </div>
+        <button className="btn-comfirm-order">Start New Order</button>
+      </div>
+      <div className="overlay"></div>
+    </>
   );
 }
 export default App;
