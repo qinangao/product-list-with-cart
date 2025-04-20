@@ -1,4 +1,5 @@
 import Button from "./Button";
+import { useState, useEffect } from "react";
 export default function ProductCard({
   productObj,
   quantity,
@@ -6,10 +7,24 @@ export default function ProductCard({
   onIncrease,
   onDecrease,
 }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 576);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth < 576);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="card">
       <div className="image-box">
-        <img src={productObj.image.desktop} alt={productObj.category} />
+        <img
+          src={isMobile ? productObj.image.mobile : productObj.image.desktop}
+          alt={productObj.category}
+        />
         <Button
           quantity={quantity}
           onAdd={onAdd}
